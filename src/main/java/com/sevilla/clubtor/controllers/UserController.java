@@ -1,6 +1,7 @@
 package com.sevilla.clubtor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sevilla.clubtor.models.UserModel;
@@ -22,8 +23,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserModel> getUserById(@PathVariable(value = "id") Long userId) {
-        return userService.getUserById(userId);
+    public ResponseEntity<UserModel> getUserById(@PathVariable(value = "id") Long userId) {
+        Optional<UserModel> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            return ResponseEntity.ok().body(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -32,13 +38,24 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserModel updateUser(@PathVariable(value = "id") Long userId, @RequestBody UserModel userDetails) {
-        return userService.updateUser(userId, userDetails);
+    public ResponseEntity<UserModel> updateUser(@PathVariable(value = "id") Long userId, @RequestBody UserModel userDetails) {
+        Optional<UserModel> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            UserModel updatedUser = userService.updateUser(userId, userDetails);
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable(value = "id") Long userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") Long userId) {
+        Optional<UserModel> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            userService.deleteUser(userId);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
-

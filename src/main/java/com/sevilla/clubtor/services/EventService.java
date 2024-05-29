@@ -28,6 +28,7 @@ public class EventService {
     }
 
     public EventModel updateEvent(Long eventId, EventModel eventDetails) {
+        eventDetails.setId(eventId);  // Asegurarse de que el ID del evento esté establecido
         return eventRepository.save(eventDetails);
     }
 

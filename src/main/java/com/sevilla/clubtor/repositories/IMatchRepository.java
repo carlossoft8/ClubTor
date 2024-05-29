@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.sevilla.clubtor.models.MatchModel;
 
 @Repository
-public interface IMatchRepository extends JpaRepository<MatchModel, Long>  {
-
+public interface IMatchRepository extends JpaRepository<MatchModel, Long> {
 }

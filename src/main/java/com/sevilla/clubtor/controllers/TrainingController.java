@@ -1,6 +1,7 @@
 package com.sevilla.clubtor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sevilla.clubtor.models.TrainingModel;
@@ -22,8 +23,13 @@ public class TrainingController {
     }
 
     @GetMapping("/{id}")
-    public Optional<TrainingModel> getTrainingById(@PathVariable(value = "id") Long trainingId) {
-        return trainingService.getTrainingById(trainingId);
+    public ResponseEntity<TrainingModel> getTrainingById(@PathVariable(value = "id") Long trainingId) {
+        Optional<TrainingModel> training = trainingService.getTrainingById(trainingId);
+        if (training.isPresent()) {
+            return ResponseEntity.ok().body(training.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -32,13 +38,24 @@ public class TrainingController {
     }
 
     @PutMapping("/{id}")
-    public TrainingModel updateTraining(@PathVariable(value = "id") Long trainingId, @RequestBody TrainingModel trainingDetails) {
-        return trainingService.updateTraining(trainingId, trainingDetails);
+    public ResponseEntity<TrainingModel> updateTraining(@PathVariable(value = "id") Long trainingId, @RequestBody TrainingModel trainingDetails) {
+        Optional<TrainingModel> training = trainingService.getTrainingById(trainingId);
+        if (training.isPresent()) {
+            TrainingModel updatedTraining = trainingService.updateTraining(trainingId, trainingDetails);
+            return ResponseEntity.ok(updatedTraining);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTraining(@PathVariable(value = "id") Long trainingId) {
-        trainingService.deleteTraining(trainingId);
+    public ResponseEntity<Void> deleteTraining(@PathVariable(value = "id") Long trainingId) {
+        Optional<TrainingModel> training = trainingService.getTrainingById(trainingId);
+        if (training.isPresent()) {
+            trainingService.deleteTraining(trainingId);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
-

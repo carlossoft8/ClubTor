@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.sevilla.clubtor.models.EventModel;
 
 @Repository
-public interface IEventRepository extends JpaRepository<EventModel, Long>  {
-
+public interface IEventRepository extends JpaRepository<EventModel, Long> {
 }

@@ -28,6 +28,7 @@ public class TrainingService {
     }
 
     public TrainingModel updateTraining(Long trainingId, TrainingModel trainingDetails) {
+        trainingDetails.setId(trainingId);  // Asegurarse de que el ID del entrenamiento esté establecido
         return trainingRepository.save(trainingDetails);
     }
 
@@ -35,4 +36,3 @@ public class TrainingService {
         trainingRepository.deleteById(trainingId);
     }
 }
-

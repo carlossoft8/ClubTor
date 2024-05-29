@@ -28,6 +28,7 @@ public class MatchService {
     }
 
     public MatchModel updateMatch(Long matchId, MatchModel matchDetails) {
+        matchDetails.setId(matchId);  // Asegurarse de que el ID del partido esté establecido
         return matchRepository.save(matchDetails);
     }
 

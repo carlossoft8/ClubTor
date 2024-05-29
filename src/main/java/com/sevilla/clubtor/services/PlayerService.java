@@ -28,6 +28,7 @@ public class PlayerService {
     }
 
     public PlayerModel updatePlayer(Long playerId, PlayerModel playerDetails) {
+        playerDetails.setId(playerId);  // Asegurarse de que el ID del jugador esté establecido
         return playerRepository.save(playerDetails);
     }
 
@@ -35,4 +36,3 @@ public class PlayerService {
         playerRepository.deleteById(playerId);
     }
 }
-

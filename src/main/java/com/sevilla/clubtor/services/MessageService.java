@@ -28,6 +28,7 @@ public class MessageService {
     }
 
     public MessageModel updateMessage(Long messageId, MessageModel messageDetails) {
+        messageDetails.setId(messageId);  // Asegurarse de que el ID del mensaje esté establecido
         return messageRepository.save(messageDetails);
     }
 

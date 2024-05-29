@@ -7,5 +7,4 @@ import com.sevilla.clubtor.models.ClubModel;
 
 @Repository
 public interface IClubRepository extends JpaRepository<ClubModel, Long> {
-
 }

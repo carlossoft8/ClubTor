@@ -28,6 +28,7 @@ public class ClubService {
     }
 
     public ClubModel updateClub(Long clubId, ClubModel clubDetails) {
+        clubDetails.setId(clubId);
         return clubRepository.save(clubDetails);
     }
 
@@ -35,4 +36,3 @@ public class ClubService {
         clubRepository.deleteById(clubId);
     }
 }
-

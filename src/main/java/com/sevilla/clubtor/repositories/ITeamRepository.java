@@ -7,5 +7,4 @@ import com.sevilla.clubtor.models.TeamModel;
 
 @Repository
 public interface ITeamRepository extends JpaRepository<TeamModel, Long> {
-
 }

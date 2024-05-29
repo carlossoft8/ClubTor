@@ -1,6 +1,7 @@
 package com.sevilla.clubtor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sevilla.clubtor.models.MessageModel;
@@ -22,8 +23,13 @@ public class MessageController {
     }
 
     @GetMapping("/{id}")
-    public Optional<MessageModel> getMessageById(@PathVariable(value = "id") Long messageId) {
-        return messageService.getMessageById(messageId);
+    public ResponseEntity<MessageModel> getMessageById(@PathVariable(value = "id") Long messageId) {
+        Optional<MessageModel> message = messageService.getMessageById(messageId);
+        if (message.isPresent()) {
+            return ResponseEntity.ok().body(message.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -32,12 +38,24 @@ public class MessageController {
     }
 
     @PutMapping("/{id}")
-    public MessageModel updateMessage(@PathVariable(value = "id") Long messageId, @RequestBody MessageModel messageDetails) {
-        return messageService.updateMessage(messageId, messageDetails);
+    public ResponseEntity<MessageModel> updateMessage(@PathVariable(value = "id") Long messageId, @RequestBody MessageModel messageDetails) {
+        Optional<MessageModel> message = messageService.getMessageById(messageId);
+        if (message.isPresent()) {
+            MessageModel updatedMessage = messageService.updateMessage(messageId, messageDetails);
+            return ResponseEntity.ok(updatedMessage);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMessage(@PathVariable(value = "id") Long messageId) {
-        messageService.deleteMessage(messageId);
+    public ResponseEntity<Void> deleteMessage(@PathVariable(value = "id") Long messageId) {
+        Optional<MessageModel> message = messageService.getMessageById(messageId);
+        if (message.isPresent()) {
+            messageService.deleteMessage(messageId);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

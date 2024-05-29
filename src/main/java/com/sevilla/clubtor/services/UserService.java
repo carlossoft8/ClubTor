@@ -1,6 +1,7 @@
 package com.sevilla.clubtor.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sevilla.clubtor.models.UserModel;
@@ -15,6 +16,9 @@ public class UserService {
     @Autowired
     private IUserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<UserModel> getAllUsers() {
         return userRepository.findAll();
     }
@@ -24,10 +28,15 @@ public class UserService {
     }
 
     public UserModel createUser(UserModel user) {
+        user.setContrasena(passwordEncoder.encode(user.getContrasena()));
         return userRepository.save(user);
     }
 
     public UserModel updateUser(Long userId, UserModel userDetails) {
+        userDetails.setId(userId);
+        if (userDetails.getContrasena() != null) {
+            userDetails.setContrasena(passwordEncoder.encode(userDetails.getContrasena()));
+        }
         return userRepository.save(userDetails);
     }
 
@@ -35,4 +44,3 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 }
-

@@ -7,5 +7,4 @@ import com.sevilla.clubtor.models.MessageModel;
 
 @Repository
 public interface IMessageRepository extends JpaRepository<MessageModel, Long> {
-
 }

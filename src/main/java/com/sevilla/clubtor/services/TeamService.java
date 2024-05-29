@@ -28,6 +28,7 @@ public class TeamService {
     }
 
     public TeamModel updateTeam(Long teamId, TeamModel teamDetails) {
+        teamDetails.setId(teamId);  // Asegurarse de que el ID del equipo esté establecido
         return teamRepository.save(teamDetails);
     }
 

@@ -7,5 +7,4 @@ import com.sevilla.clubtor.models.PlayerModel;
 
 @Repository
 public interface IPlayerRepository extends JpaRepository<PlayerModel, Long> {
-
 }
