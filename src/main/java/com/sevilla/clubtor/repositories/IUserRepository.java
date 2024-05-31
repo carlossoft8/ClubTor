@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.sevilla.clubtor.models.UserModel;
 
+import java.util.Optional;
+
 @Repository
 public interface IUserRepository extends JpaRepository<UserModel, Long> {
-    Object findByCorreoElectronico(String username);
+    Optional<UserModel> findByCorreoElectronico(String correoElectronico);
 }

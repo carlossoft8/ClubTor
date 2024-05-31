@@ -1,28 +1,33 @@
 package com.sevilla.clubtor.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import com.sevilla.clubtor.services.UserDetailsServiceImpl;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfiguration {
+public class SecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return userDetailsService;
     }
 
     @Bean
@@ -30,14 +35,23 @@ public class SecurityConfig extends WebSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/users/**").hasRole("ADMIN")
-            .antMatchers("/**").permitAll()
-            .and()
-            .httpBasic();
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/users/**").hasRole("ADMIN")
+                                .anyRequest().permitAll())
+                .httpBasic(withDefaults());
+        return http.build();
     }
 }
