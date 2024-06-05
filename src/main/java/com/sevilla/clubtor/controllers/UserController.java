@@ -2,6 +2,7 @@ package com.sevilla.clubtor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.sevilla.clubtor.models.UserModel;
@@ -57,5 +58,18 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserModel> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        Optional<UserModel> user = userService.getUserByEmail(email);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserModel> getUserByEmail(@PathVariable String email) {
+        Optional<UserModel> user = userService.getUserByEmail(email);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -30,7 +30,7 @@ public class EventModel {
     @NotBlank
     private String lugar;
 
-    @NotBlank // Asumiendo que el nombre del evento no puede estar en blanco
+    @NotBlank
     private String nombreEvento;
 
     @ManyToOne
