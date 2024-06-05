@@ -30,6 +30,9 @@ public class EventModel {
     @NotBlank
     private String lugar;
 
+    @NotBlank // Asumiendo que el nombre del evento no puede estar en blanco
+    private String nombreEvento;
+
     @ManyToOne
     private ClubModel club;
 
@@ -73,6 +76,14 @@ public class EventModel {
 
     public void setLugar(String lugar) {
         this.lugar = lugar;
+    }
+
+    public String getNombreEvento() {
+        return nombreEvento;
+    }
+
+    public void setNombreEvento(String nombreEvento) {
+        this.nombreEvento = nombreEvento;
     }
 
     public ClubModel getClub() {
