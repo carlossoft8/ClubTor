@@ -40,6 +40,9 @@ public class UserModel {
     @Size(max = 50)
     private String rol;
 
+    @Size(max = 255)
+    private String imagenUrl;
+
     // Getters y Setters
 
     public Long getId() {
@@ -88,6 +91,14 @@ public class UserModel {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 }
 
